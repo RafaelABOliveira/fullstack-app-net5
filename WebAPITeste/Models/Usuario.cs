@@ -14,5 +14,6 @@ namespace WebAPITeste.Models
         public DateTime? DataInclusao { get; set; }
         public DateTime? DataAlteracao { get; set; }
         public bool? StatusUsuario { get; set; }
+        public int? Regras { get; set; }
     }
 }

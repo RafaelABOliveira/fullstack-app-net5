@@ -69,15 +69,8 @@ namespace GuaranyCalc.Api.Controllers
                     return Unauthorized("Já existe um usuário com este e-mail");
                 }
 
-                string nameRegex = "^[a-zA-Z]{2,}(?: [a-zA-Z]+){1,}$";
-
-                Regex regexObj = new Regex(nameRegex);
-
-                if (!regexObj.IsMatch(model.Nome))
-                {
-                    return UnprocessableEntity("Nome inválido");
-                }
-
+                model.DataInclusao = DateTime.Now;
+                model.DataAlteracao = DateTime.Now;
                 _context.Usuarios.Add(model);
 
                 _context.SaveChanges();
@@ -97,19 +90,14 @@ namespace GuaranyCalc.Api.Controllers
             var user = _context.Usuarios.Find(model.UsuarioId);
             if (user == null)
                 throw new ArgumentException($"Nao foi possivel encontrar o usuario ${model.UsuarioId}");
-                
-            string nameRegex = "^[a-zA-Z]{2,}(?: [a-zA-Z]+){1,}$";
 
-            Regex regexObj = new Regex(nameRegex);
+            user.Nome = model.Nome;
+            user.Senha = model.Senha;
+            user.DataAlteracao = DateTime.Now;
+            user.StatusUsuario = model.StatusUsuario;
+            user.Regras = model.Regras;
 
-            if (!regexObj.IsMatch(model.Nome))
-            {
-                return UnprocessableEntity("Nome inválido");
-            }
-            _context.Usuarios.Attach(user);
-
-            _context.Entry(user).CurrentValues.SetValues(model);
-
+            _context.Usuarios.Update(user);
             _context.SaveChanges();
 
             return Ok(user);

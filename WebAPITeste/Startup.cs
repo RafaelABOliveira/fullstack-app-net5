@@ -28,6 +28,7 @@ namespace WebAPITeste
         public void ConfigureServices(IServiceCollection services)
         {
 
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -36,6 +37,13 @@ namespace WebAPITeste
 
             services.AddScoped<UsuariosTesteContext, UsuariosTesteContext>();
             services.AddScoped<UsuariosController, UsuariosController>();
+
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
 
         }
 
@@ -47,7 +55,9 @@ namespace WebAPITeste
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPITeste v1"));
-            }
+            };
+
+            this.ConfigureCors(app);
 
             app.UseRouting();
 
@@ -55,8 +65,15 @@ namespace WebAPITeste
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                  name: "default",
+                  pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void ConfigureCors(IApplicationBuilder app)
+        {
+            app.UseCors("MyPolicy");
         }
 
     }
