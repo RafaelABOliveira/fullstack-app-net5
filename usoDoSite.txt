@@ -1,0 +1,5 @@
+1 - Tenha o Visual Studio Atualizado e rode com "IIS Express"
+2 - Entre na pasta Front, digite "npm install" e depois "npm run serve"
+3 - Use o banco de dados da máquina ou escolhido (na linha 27 do arquivo Models > UsuariosTesteContext.cs
+    mude a string de conexão para o banco desejado)
+4 - Uma réplica do banco estará na pasta raiz do projeto
